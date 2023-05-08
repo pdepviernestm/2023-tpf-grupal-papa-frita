@@ -24,7 +24,7 @@ Finalmente, la carpeta debe quedar con 2 archivos: “leeme.md” con el conteni
 4. Determinar si un commit que resulta inutil para una carpeta, dejaría de serlo si se realizaran sus cambios en la misma carpeta en orden inverso.
 ```
 ## Responsables
-Yanel Agostini Dohmen - 207.911-2
-Franco Alejandro Stazzone - 204.094-3
-Franco Alanoca - 153.946-2
-Lucas Jorge Ocampo - 203.899-7
+Yanel Agostini Dohmen - 207.911-2 <br>
+Franco Alejandro Stazzone - 204.094-3 <br>
+Franco Alanoca - 153.946-2 <br>
+Lucas Jorge Ocampo - 203.899-7 <br>
