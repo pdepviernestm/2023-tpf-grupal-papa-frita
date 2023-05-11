@@ -8,6 +8,7 @@ data Carpeta = UnaCarpeta {
     contenidoCarpeta :: [Archivo]
 } deriving(Show, Eq)
 
+-- Ejemplos
 archivo :: Archivo
 archivo = UnArchivo "dibu" "mira que te come"
 
@@ -19,6 +20,7 @@ carpeta = UnaCarpeta "carpetita" [archivo]
 
 carpeta2 :: Carpeta
 carpeta2 = UnaCarpeta "carpetita2" [archivo, archivo2]
+-- Fin de los ejemplos
 
 listaNombresdeArchivo:: Carpeta -> [String]
 listaNombresdeArchivo carpeta = map nombre (contenidoCarpeta carpeta)
@@ -52,13 +54,20 @@ agregarTexto :: String -> String -> Carpeta -> Carpeta
 agregarTexto nombreArchivo texto carpeta    | existeArchivo nombreArchivo carpeta = UnaCarpeta (nombreCarpeta carpeta) (map (modificarArchivo nombreArchivo texto) (contenidoCarpeta carpeta))
                                             | otherwise = carpeta
 
-sacarTextoArchivo :: String -> Archivo -> Int -> Int -> p -> Archivo
-sacarTextoArchivo nombreArchivo archivo num1 num2 nombreCarpeta | nombreArchivo == nombre archivo = UnArchivo nombreArchivo (drop num2 (take num1 (contenido archivo)))
-                                                                |otherwise = archivo
+-- El +1 en los take es para que solo borre los caracteres entre n1 y n2, sin incluirlos. Si no estuviera el +1 tambien borraría el n1.
+sacarCaracteres:: String -> Int -> Int -> String
+sacarCaracteres contenido n1 n2 | n1 < n2 = take (n1+1) contenido ++ drop n2 contenido
+                                | n1 > n2 = take (n2+1) contenido ++ drop n1 contenido
+                                | otherwise = contenido
 
-sacarContenidoArchivo :: String -> Archivo -> Int -> Int -> (Carpeta -> String) -> Carpeta
-sacarContenidoArchivo nombreArchivo archivo num1 num2 nombreCarpeta | existeArchivo nombreArchivo carpeta = UnaCarpeta (nombreCarpeta carpeta) (map (sacarTextoArchivo nombreArchivo archivo num1 num2) (contenidoCarpeta carpeta))
-                                                                    |otherwise = carpeta
+sacarTextoArchivo:: String -> Int -> Int -> Archivo -> Archivo
+sacarTextoArchivo nombreArchivo num1 num2 archivo   | nombreArchivo == nombre archivo = UnArchivo nombreArchivo (sacarCaracteres (contenido archivo) num1 num2)
+                                                    | otherwise = archivo
+
+sacarContenidoArchivo :: String -> Int -> Int -> Carpeta -> Carpeta
+sacarContenidoArchivo nombreArchivo num1 num2 carpeta   | existeArchivo nombreArchivo carpeta = UnaCarpeta (nombreCarpeta carpeta) (map (sacarTextoArchivo nombreArchivo num1 num2) (contenidoCarpeta carpeta))
+                                                        | otherwise = carpeta
+
 
 commit:: Carpeta -> [Carpeta -> Carpeta] -> Carpeta
 commit carpeta funciones = foldl (flip ($)) carpeta funciones
