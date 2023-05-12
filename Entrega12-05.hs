@@ -8,6 +8,11 @@ data Carpeta = UnaCarpeta {
     contenidoCarpeta :: [Archivo]
 } deriving(Show, Eq)
 
+data Commit = UnCommit {
+    descripcion :: String,
+    conjuntoCambios:: [(a->b)]
+}deriving(Show)
+
 -- Ejemplos
 archivo :: Archivo
 archivo = UnArchivo "dibu" "mira que te come"
@@ -32,7 +37,7 @@ existeArchivo nombreArchivo carpeta = elem nombreArchivo (listaNombresdeArchivo 
 
 crearArchivo:: String -> Carpeta -> Carpeta
 crearArchivo  nombre carpeta    | existeArchivo nombre carpeta = carpeta
-                                | otherwise = carpeta {contenidoCarpeta = contenidoCarpeta carpeta ++ UnArchivo nombre ""}
+                                | otherwise = carpeta {contenidoCarpeta = contenidoCarpeta carpeta ++ [UnArchivo nombre ""]}
 
 
 compararNombre:: String -> Archivo -> Bool
