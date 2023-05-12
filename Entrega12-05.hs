@@ -22,25 +22,27 @@ carpeta2 :: Carpeta
 carpeta2 = UnaCarpeta "carpetita2" [archivo, archivo2]
 -- Fin de los ejemplos
 
+{- listaNombresdeArchivo:: Carpeta -> [String]
+listaNombresdeArchivo carpeta = map nombre (contenidoCarpeta carpeta) -}
 listaNombresdeArchivo:: Carpeta -> [String]
-listaNombresdeArchivo carpeta = map nombre (contenidoCarpeta carpeta)
+listaNombresdeArchivo = map nombre . contenidoCarpeta
 
 existeArchivo :: String -> Carpeta -> Bool
 existeArchivo nombreArchivo carpeta = elem nombreArchivo (listaNombresdeArchivo carpeta)
 
 crearArchivo:: String -> Carpeta -> Carpeta
 crearArchivo  nombre carpeta    | existeArchivo nombre carpeta = carpeta
-                                | otherwise = UnaCarpeta (nombreCarpeta carpeta) (contenidoCarpeta carpeta ++ [UnArchivo nombre ""])
+                                | otherwise = carpeta {contenidoCarpeta = contenidoCarpeta carpeta ++ UnArchivo nombre ""}
 
 
-filtrarNombre:: String -> Archivo -> Bool
-filtrarNombre nombreArchivo archivo = nombreArchivo /= nombre archivo
+compararNombre:: String -> Archivo -> Bool
+compararNombre nombreArchivo archivo = nombreArchivo /= nombre archivo
 
 listaSinArchivo:: Carpeta -> String -> [Archivo]
-listaSinArchivo carpeta nombreArchivo = filter (filtrarNombre nombreArchivo) (contenidoCarpeta carpeta)
+listaSinArchivo carpeta nombreArchivo = filter (compararNombre nombreArchivo) (contenidoCarpeta carpeta)
 
 borrarArchivo:: String -> Carpeta -> Carpeta
-borrarArchivo nombre carpeta    | existeArchivo nombre carpeta = UnaCarpeta (nombreCarpeta carpeta) (listaSinArchivo carpeta nombre)
+borrarArchivo nombre carpeta    | existeArchivo nombre carpeta = carpeta {contenidoCarpeta = listaSinArchivo carpeta nombre}
                                 | otherwise = carpeta
 
 vaciarCarpeta :: Carpeta -> Carpeta
