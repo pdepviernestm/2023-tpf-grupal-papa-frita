@@ -1,3 +1,5 @@
+import Text.Show.Functions 
+
 data Archivo = UnArchivo {
     nombre :: String,
     contenido :: String
@@ -10,10 +12,13 @@ data Carpeta = UnaCarpeta {
 
 data Commit = UnCommit {
     descripcion :: String,
-    conjuntoCambios:: [(a->b)]
+    conjuntoCambios :: [Carpeta -> Carpeta]
 }deriving(Show)
 
+type Branch = [Commit]
+
 -- Ejemplos
+
 archivo :: Archivo
 archivo = UnArchivo "dibu" "mira que te come"
 
@@ -25,10 +30,18 @@ carpeta = UnaCarpeta "carpetita" [archivo]
 
 carpeta2 :: Carpeta
 carpeta2 = UnaCarpeta "carpetita2" [archivo, archivo2]
+
+commit1 :: Commit
+commit1 = UnCommit "Commit 1" [crearArchivo "nuevoArchivo1", borrarArchivo "dibu"]
+
+commit2 :: Commit
+commit2 = UnCommit "Commit 2" [agregarTexto "mesi" "goleador"]
+
+branch :: Branch
+branch = [commit1, commit2]
+
 -- Fin de los ejemplos
 
-{- listaNombresdeArchivo:: Carpeta -> [String]
-listaNombresdeArchivo carpeta = map nombre (contenidoCarpeta carpeta) -}
 listaNombresdeArchivo:: Carpeta -> [String]
 listaNombresdeArchivo = map nombre . contenidoCarpeta
 
@@ -38,7 +51,6 @@ existeArchivo nombreArchivo carpeta = elem nombreArchivo (listaNombresdeArchivo 
 crearArchivo:: String -> Carpeta -> Carpeta
 crearArchivo  nombre carpeta    | existeArchivo nombre carpeta = carpeta
                                 | otherwise = carpeta {contenidoCarpeta = contenidoCarpeta carpeta ++ [UnArchivo nombre ""]}
-
 
 compararNombre:: String -> Archivo -> Bool
 compararNombre nombreArchivo archivo = nombreArchivo /= nombre archivo
@@ -75,7 +87,6 @@ sacarContenidoArchivo :: String -> Int -> Int -> Carpeta -> Carpeta
 sacarContenidoArchivo nombreArchivo num1 num2 carpeta   | existeArchivo nombreArchivo carpeta = UnaCarpeta (nombreCarpeta carpeta) (map (sacarTextoArchivo nombreArchivo num1 num2) (contenidoCarpeta carpeta))
                                                         | otherwise = carpeta
 
-
 commit:: Carpeta -> [Carpeta -> Carpeta] -> Carpeta
 commit carpeta funciones = foldl (flip ($)) carpeta funciones
 
@@ -84,3 +95,10 @@ esInutil carpeta funciones = carpeta == commit carpeta funciones
 
 esInutilAlReves:: Carpeta -> [Carpeta -> Carpeta] -> Bool
 esInutilAlReves carpeta funciones = carpeta == commit carpeta (reverse funciones)
+
+--SEGUNDA PARTE
+
+checkout :: Carpeta -> Branch -> Carpeta
+checkout carpeta [] = carpeta --En caso de que no haya commits devuelvo la carpeta
+checkout carpeta (x:xs) = checkout (commit carpeta (conjuntoCambios x)) xs -- Hago un commit con el primer commit "x" y dsp utilizo la recursividad para hacerlo con el resto de commits "xs"
+
