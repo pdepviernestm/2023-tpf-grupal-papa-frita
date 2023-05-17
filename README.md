@@ -23,6 +23,30 @@ Finalmente, la carpeta debe quedar con 2 archivos: “leeme.md” con el conteni
 3. Determinar si un commit es inutil para una carpeta, lo cual se deduce de que la carpeta quede igual que antes luego de "cometerlo".
 4. Determinar si un commit que resulta inutil para una carpeta, dejaría de serlo si se realizaran sus cambios en la misma carpeta en orden inverso.
 ```
+
+## Segunda parte - Archivos y carpetas <br>
+```
+Una rama ("branch") es una forma de organizar los commits que representa la evolución de una carpeta a lo largo del tiempo. En particular, lo que da origen a su nombre, es permitir que haya bifurcaciones en la historia
+de commits, de manera que se forman diferentes branches con los primeros commits en común. (Es una suerte de multiuniverso o "elige tu propia aventura" donde la situacion final de la carpeta depende de qué
+branch se considere). Para simplificar, a diferencia de lo que sucede en la realidad con git, en esta versión los branches nunca se juntan ("merge"), por lo que si bien dos commits diferentes pueden ser vistos como
+siguientes de un mismo commit, siempre cada commit tiene un único commit anterior. También, se debe poder diferenciar al commit inicial de los restantes, para identificar lo que sería la raíz del árbol.
+Se pide:
+5. Hacer el checkout de una branch en una carpeta: Consiste en aplicar sucesivamente los cambios de todos los commits de la branch en la carpeta.
+6. Conocer el log de un archivo a partir de una branch: Consiste en obtener una lista de los nombres de los commits de la branch que afectan a dicho archivo.
+Se pide:
+1. Definir las estructuras necesarias y funciones básicas para representar el nuevo modelo.
+2. Hacer una nueva versioń del checkout de una branch, en este caso a partir de un commit cualquiera, que implica aplicar sucesivamente los cambios desde dicho commit hasta el inicial.
+Al infinito y más allá
+3. Analizar qué sucedería con las funciones realizadas si sucede que:
+○ Un archivo tenga como contenido una lista infinita de caracteres
+○ Una carpeta tenga infinitos archivos
+Mostrar ejemplos de consulta y respuesta
+
+```
+## Respuestas Segunda Parte
+Un archivo tenga como contenido una lista infinita de caracteres: A logArchivo no le afecta que el archivo contenga una infinita cantidad de caracteres.<br>
+Una carpeta tenga infinitos archivos : A checkout le afecta dependiendo del commit solamente funciona cuando aplicamos la funcion vaciarCarpeta.<br>
+
 ## Responsables
 Yanel Agostini Dohmen - 207.911-2 <br>
 Franco Alejandro Stazzone - 204.094-3 <br>
