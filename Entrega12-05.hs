@@ -129,12 +129,15 @@ checkout carpeta (x:xs) = checkout (aplicarCambios carpeta (conjuntoCambios x)) 
 sonIguales :: String -> Archivo -> Bool
 sonIguales nombreArchivo archivo = nombre archivo == nombreArchivo
 
-soloArchivo :: String -> Carpeta -> [Archivo]
-soloArchivo nombreArchivo carpeta = filter (sonIguales nombreArchivo) (contenidoCarpeta carpeta)
+sonIguales2 :: String -> Archivo -> Bool
+sonIguales2 nombreArchivo = (== nombreArchivo).nombre 
 
+soloArchivo :: String -> Carpeta -> [Archivo]
+soloArchivo nombreArchivo = filter (sonIguales  nombreArchivo) . contenidoCarpeta
+                                --  filter (sonIguales nombreArchivo) (contenidoCarpeta carpeta)
 afectaArchivo :: String -> Commit -> [String]
-afectaArchivo nombreArchivo commit  |   soloArchivo nombreArchivo (UnaCarpeta "_" [UnArchivo nombreArchivo ""]) /= soloArchivo nombreArchivo (aplicarCambios (UnaCarpeta "_" [UnArchivo nombreArchivo ""]) (conjuntoCambios commit)) = [descripcion commit]
-                                    |   soloArchivo nombreArchivo (UnaCarpeta "_" []) /= soloArchivo nombreArchivo (aplicarCambios (UnaCarpeta "_" []) (conjuntoCambios commit)) = [descripcion commit]
+afectaArchivo nombreArchivo commit  |   [UnArchivo nombreArchivo ""] /= soloArchivo nombreArchivo (aplicarCambios (UnaCarpeta "_" [UnArchivo nombreArchivo ""]) (conjuntoCambios commit)) = [descripcion commit]
+                                    |   [] /= soloArchivo nombreArchivo (aplicarCambios (UnaCarpeta "_" []) (conjuntoCambios commit)) = [descripcion commit]
                                     |   otherwise = []
 
 logArchivo:: String -> Branch -> [String]
